@@ -103,15 +103,25 @@ function Attendance() {
 
                 <td>
                   {a.Status === "Absent" && (
-                    <button
-                      onClick={() => setSelectedRecord(a)}
-                      className="bg-red-500 text-white px-2 py-1 rounded"
-                    >
-                      Request
-                    </button>
+                    a.RequestID ? (
+                      <span className={
+                        a.RequestStatus === "Approved" ? "text-green-600 font-semibold" :
+                        a.RequestStatus === "Rejected" ? "text-red-600 font-semibold" :
+                        "text-yellow-600 font-semibold"
+                      }>
+                        {a.RequestStatus || "Requested"}
+                      </span>
+                    ) : (
+                      <button
+                        onClick={() => setSelectedRecord(a)}
+                        className="bg-red-500 text-white px-2 py-1 rounded"
+                      >
+                        Request
+                      </button>
+                    )
                   )}
                 </td>
-
+                  
               </tr>
             ))}
           </tbody>

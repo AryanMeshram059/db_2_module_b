@@ -26,15 +26,21 @@ function Dashboard() {
 
       <div className="p-6">
 
-        <div className="bg-white p-4 rounded shadow mb-6">
+        {/* <div className="bg-white p-4 rounded shadow mb-6">
           <h2 className="text-2xl font-bold">
             Welcome {user.Name}
           </h2>
           <p className="text-gray-500">{user.Role}</p>
-        </div>
+        </div> */}
 
         {user.Role === "Student" && (
           <>
+            <div className="bg-white p-4 rounded shadow mb-6">
+              <h2 className="text-2xl font-bold">
+                Welcome {user.Name}
+              </h2>
+              <p className="text-gray-500">{user.Role}</p>
+            </div>
             <Attendance />
             <Requests role="Student" />
           </>
@@ -42,6 +48,12 @@ function Dashboard() {
 
         {user.Role === "Admin" && (
           <>
+            <div className="bg-white p-4 rounded shadow mb-6">
+              <h2 className="text-2xl font-bold">
+                Welcome Proffessor    {user.Name}   
+              </h2>
+              <p className="text-gray-500">{user.Role}</p>
+            </div>
             <Requests role="Admin" />
             <Logs />
           </>

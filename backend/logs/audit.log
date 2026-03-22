@@ -1,0 +1,70 @@
+const express = require("express");
+const router = express.Router();
+const db = require("../db");
+const auth = require("../middleware/auth");
+const logAction = require("../utils/logger");
+
+// GET current user
+router.get("/me", auth, (req, res) => {
+
+  logAction(
+    "VIEW_PROFILE_REQUEST",
+    `user=${req.user.id}`
+  );
+
+  db.query(
+    "SELECT MemberID, Name, Email, Role FROM member WHERE MemberID = ?",
+    [req.user.id],
+    (err, result) => {
+      if (err) {
+        logAction(
+          "VIEW_PROFILE_ERROR",
+          `user=${req.user.id}`
+        );
+        return res.status(500).send(err);
+      }
+
+      if (result.length === 0) {
+        logAction(
+          "VIEW_PROFILE_FAILED",
+          `user=${req.user.id} NOT_FOUND`
+        );
+        return res.status(404).send("User not found");
+      }
+
+      logAction(
+        "VIEW_PROFILE_SUCCESS",
+        `user=${req.user.id} role=${result[0].Role}`
+      );
+
+      res.json(result[0]);
+    }
+  );
+
+});
+
+module.exports = router;[2026-03-22T11:33:06.428Z] USER_LOGIN: user=rohit.verma@iitam.ac.in role=Student SUCCESS
+[2026-03-22T11:33:06.486Z] VIEW_COURSES_REQUEST: user=230015 role=Student
+[2026-03-22T11:33:06.497Z] VIEW_REQUESTS: user=230015 role=Student
+[2026-03-22T11:33:06.504Z] VIEW_COURSES_SUCCESS: user=230015
+[2026-03-22T11:33:06.509Z] VIEW_REQUESTS_SUCCESS: user=230015 records=0             
+[2026-03-22T11:33:09.840Z] VIEW_ATTENDANCE_REQUEST: user=230015 role=Student course=301
+[2026-03-22T11:33:09.854Z] VIEW_ATTENDANCE_SUCCESS: user=230015 role=Student course=301
+[2026-03-22T11:33:11.583Z] VIEW_ATTENDANCE_REQUEST: user=230015 role=Student course=301
+[2026-03-22T11:33:11.597Z] VIEW_ATTENDANCE_SUCCESS: user=230015 role=Student course=301       [2026-03-22T11:56:30.666Z] VIEW_REQUESTS: user=9001 role=Admin
+[2026-03-22T11:56:30.672Z] VIEW_REQUESTS_SUCCESS: user=9001 role=Admin records=16
+[2026-03-22T11:58:50.605Z] VIEW_REQUESTS: user=9001 role=Admin
+[2026-03-22T11:58:50.639Z] VIEW_REQUESTS_SUCCESS: user=9001 role=Admin records=16
+[2026-03-22T11:58:57.271Z] VIEW_REQUESTS: user=9001 role=Admin
+[2026-03-22T11:58:57.279Z] ACCESS_GRANTED: user=9001 role=Admin allowed=GET /api/logs
+[2026-03-22T11:58:57.279Z] VIEW_AUDIT_LOGS_REQUEST: admin=9001
+[2026-03-22T11:58:57.288Z] VIEW_REQUESTS_SUCCESS: user=9001 role=Admin records=16
+[2026-03-22T11:58:57.297Z] VIEW_AUDIT_LOGS_SUCCESS: admin=9001 records=29
+[2026-03-22T11:59:02.573Z] ACCESS_GRANTED: user=9001 role=Admin allowed=PUT /api/request/55
+[2026-03-22T11:59:02.574Z] UPDATE_REQUEST_ATTEMPT: admin=9001 requestId=55 status=Rejected
+[2026-03-22T11:59:02.640Z] UPDATE_REQUEST_SUCCESS: admin=9001 requestId=55 status=Rejected
+[2026-03-22T11:59:05.759Z] VIEW_REQUESTS: user=9001 role=Admin
+[2026-03-22T11:59:05.766Z] ACCESS_GRANTED: user=9001 role=Admin allowed=GET /api/logs
+[2026-03-22T11:59:05.767Z] VIEW_AUDIT_LOGS_REQUEST: admin=9001
+[2026-03-22T11:59:05.770Z] VIEW_REQUESTS_SUCCESS: user=9001 role=Admin records=16
+[2026-03-22T11:59:05.773Z] VIEW_AUDIT_LOGS_SUCCESS: admin=9001 records=29
